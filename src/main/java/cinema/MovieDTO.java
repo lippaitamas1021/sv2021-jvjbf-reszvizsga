@@ -12,6 +12,5 @@ public class MovieDTO {
 
     private String title;
     private LocalDateTime date;
-    private int maxSeats;
     private int freeSpaces;
 }

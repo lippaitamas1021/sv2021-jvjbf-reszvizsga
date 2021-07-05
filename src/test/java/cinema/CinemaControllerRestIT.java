@@ -37,7 +37,6 @@ public class CinemaControllerRestIT {
         assertEquals(120, result.getFreeSpaces());
     }
 
-
     @Test
     void testGetMovies() {
         template.postForObject("/api/cinema",
@@ -73,7 +72,7 @@ public class CinemaControllerRestIT {
                 }).getBody();
         assertThat(result)
                 .extracting(MovieDTO::getTitle)
-                .contains("Batman");
+                .containsExactly("Batman");
     }
 
     @Test

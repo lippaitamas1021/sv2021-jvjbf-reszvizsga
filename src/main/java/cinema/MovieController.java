@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
-
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -27,13 +26,8 @@ public class MovieController {
         return movieService.getMovies(title);
     }
 
-    @GetMapping("/{title}")
-    public List<MovieDTO> getMovieByTitle(@PathVariable("title") String title) {
-        return movieService.getMovieByTitle(title);
-    }
-
     @GetMapping("/{id}")
-    public Movie getMovieById(@PathVariable("id") long id) {
+    public MovieDTO getMovieById(@PathVariable("id") long id) {
         return movieService.getMovieById(id);
     }
 
@@ -44,27 +38,29 @@ public class MovieController {
     }
 
     @PostMapping("/{id}/reserve")
-    public MovieDTO reserveSeatsForAMovie(@PathVariable("id") long id, @Valid @RequestBody CreateReservationCommand command) {
-        return movieService.reserveSeatsForAMovie(id, command);
+    @ResponseStatus(HttpStatus.CREATED)
+    public MovieDTO createReservation(@PathVariable("id") long id, @RequestBody CreateReservationCommand command) {
+        return movieService.createReservation(id, command);
     }
 
-    @PostMapping("/{id}/refresh")
-    public List<MovieDTO> updateDateAndTimeOfAMovie(@PathVariable("id") long id, @RequestBody UpdateDateCommand command) {
+    @PutMapping("/{id}")
+    public MovieDTO updateDateAndTimeOfAMovie(@PathVariable("id") long id, @RequestBody UpdateDateCommand command) {
         return movieService.updateDateAndTimeOfAMovie(id, command);
     }
 
     @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAllMovies() {
         movieService.deleteAll();
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<Problem> handleExceptionWhenNotFound(IllegalStateException iae) {
+    public ResponseEntity<Problem> handleExceptionWhileReserving(IllegalStateException ise) {
         Problem problem = Problem.builder()
-                .withType(URI.create("cinema/not-found"))
-                .withTitle("Cinema not found")
+                .withType(URI.create("cinema/bad-reservation"))
+                .withTitle("Bad reservation")
                 .withStatus(Status.BAD_REQUEST)
-                .withDetail(iae.getMessage())
+                .withDetail(ise.getMessage())
                 .build();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -75,8 +71,8 @@ public class MovieController {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Problem> handleExceptionWhenNotFound(IllegalArgumentException iae) {
         Problem problem = Problem.builder()
-                .withType(URI.create("cinema/bad-reservation"))
-                .withTitle("Cinema bad reservation")
+                .withType(URI.create("cinema/not-found"))
+                .withTitle("Not found")
                 .withStatus(Status.NOT_FOUND)
                 .withDetail(iae.getMessage())
                 .build();
