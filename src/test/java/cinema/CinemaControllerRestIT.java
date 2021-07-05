@@ -10,10 +10,8 @@ import org.springframework.http.HttpMethod;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 import java.net.URI;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,7 +25,6 @@ public class CinemaControllerRestIT {
     void init() {
         template.delete("/api/cinema");
     }
-
 
     @Test
     void testAddNewMovie() {
@@ -62,7 +59,6 @@ public class CinemaControllerRestIT {
 
     @Test
     void testGetMoviesByTitle() {
-
         template.postForObject("/api/cinema",
                 new CreateMovieCommand("Titanic", LocalDateTime.of(2021, 6, 30, 12, 30), 120),
                 MovieDTO.class);
@@ -77,9 +73,8 @@ public class CinemaControllerRestIT {
                 }).getBody();
         assertThat(result)
                 .extracting(MovieDTO::getTitle)
-                .containsExactly("Batman");
+                .contains("Batman");
     }
-
 
     @Test
     void testCreateNewReservation() {

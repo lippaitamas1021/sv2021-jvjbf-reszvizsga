@@ -2,8 +2,10 @@ GET http://localhost:8080/api/cinema
 Accept: application/json
 
 ###
+
 POST http://localhost:8080/api/cinema
 Content-Type: application/json
+Accept: application/json
 
 {
   "title": "",
@@ -12,3 +14,35 @@ Content-Type: application/json
 }
 
 ###
+
+PUT http://localhost:8080/api/cinema/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "date": 202107011230
+}
+
+###
+
+POST http://localhost:8080/api/cinema
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Batman",
+  "date" : [2021,6,30,12,30],
+  "maxReservation": 120
+}
+
+###
+
+POST http://localhost:8080/api/cinema
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Titanic",
+  "date" : [2021,6,30,12,30],
+  "maxReservation": 120
+}
